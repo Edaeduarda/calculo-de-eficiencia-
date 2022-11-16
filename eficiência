@@ -1,0 +1,51 @@
+
+ var a = flow.get('VAZAO_CERV_CT01')
+ var b = flow.get('TEMP_ENTRADA_CERV_CT01')
+ var c = flow.get('TEMP_SAIDA_CERV_CT01')
+ var d = flow.get('ABERTURA_VALV_ENTR_ETANOL')
+ var e = flow.get('TEMP_ENTRADA_ETANOL_CT01')
+ var f = flow.get('TEMP_RETORNO_ETANOL_CT01')
+ 
+ //Cálculo Cerveja
+ 
+ let massa_cerv_ct01 = ((a * 1075)/10);
+ let cp_cerv_ct01 = 0.945;
+ let delta_temp_cerv_ct01 = (c - b);
+ let q_real_cerv_ct01 = (massa_cerv_ct01*cp_cerv_ct01*delta_temp_cerv_ct01);
+ 
+ //Cálculo Etanol
+ 
+ let massa_eta_ct01 = (d * 80000)
+ let cp_eta_ct01 = 1.02;
+ let delta_temp_eta_ct01 = (11.2);
+ let delta_temp_real_eta_ct01 = (f - e);
+ let q_real_eta_ct01 = (massa_eta_ct01*cp_eta_ct01*delta_temp_eta_ct01);
+ 
+ var eficiencia_desejada_ct01 = 0.85
+ 
+ //Cálculo Eficiência Trocador
+ 
+
+ let efetividade_ct01 = (q_real_cerv_ct01 / q_real_eta_ct01)*(-1);
+ if(d==0)
+ {
+    efetividade_ct01 =0
+ }
+ 
+msg.payload={
+    "massa_cerv_ct01":massa_cerv_ct01,
+    "cp_cerv_ct01":cp_cerv_ct01,
+    "delta_temp_cerv_ct01":delta_temp_cerv_ct01,
+    "q_real_cerv_ct01":q_real_cerv_ct01,
+    
+    "massa_eta_ct01":massa_eta_ct01,
+    "cp_eta_ct01":cp_eta_ct01,
+    "delta_temp_eta_ct01":delta_temp_eta_ct01,
+    "delta_temp_real_eta_ct01":delta_temp_real_eta_ct01,
+    "q_real_eta_ct01":q_real_eta_ct01,
+    
+    "efetividade_ct01":efetividade_ct01,
+    "eficiencia_desejada_ct01":eficiencia_desejada_ct01,
+    "d":d
+}
+return msg;
